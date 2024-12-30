@@ -1,0 +1,105 @@
+@import 'primeicons/primeicons.css';
+
+.p-inputtext {
+  height: 35px;
+  padding-left: 8px;
+}
+.up-acceptance-card {
+  & .p-inputtext {
+    height: 30px;
+  }
+}
+.p-paginator {
+  & .p-dropdown,
+  .p-paginator .p-dropdown-label .p-inputtext {
+    height: auto !important;
+  }
+  & .p-inputtext {
+    height: auto !important;
+    padding-top: 2px;
+    padding-bottom: 4px;
+  }
+}
+.p-dropdown-item,
+.p-dropdown-empty-message {
+  padding-left: 8px;
+}
+.p-dropdown-label {
+  display: flex;
+  align-items: center;
+}
+.p-dropdown-filter-container {
+  height: 35px;
+}
+.small {
+  & .p-dropdown-filter-container {
+    height: 24px;
+  }
+  & .p-dropdown-label {
+    height: 24px;
+  }
+  & .p-dropdown-items {
+    padding-left: 0px;
+  }
+}
+.dropdown-owerflow {
+  .p-dropdown-item {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .p-dropdown-items-wrapper {
+    max-height: 300px !important;
+  }
+}
+.p-dropdown-filter-container svg {
+  margin-top: -6px;
+}
+.p-element .p-inputwrapper,
+.p-inputtext {
+  width: 100%;
+  display: flex;
+}
+.app-paginator {
+  & .p-element .p-inputwrapper,
+  .p-inputtext {
+    width: auto !important;
+    display: flex;
+  }
+}
+.up .mat-expansion-panel-body {
+  padding-left: 13px !important;
+  padding-right: 13px !important;
+}
+.up .mat-mdc-tab:not(.mdc-tab--stacked) {
+  height: 35px;
+}
+.up {
+  & .mdc-tab {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  margin: 2px 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+.p-toast {
+  & .p-icon-wrapper {
+    width: 14px;
+  }
+  & .p-toast-message-content {
+    display: flex;
+    column-gap: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  & .p-toast-message-icon {
+    display: flex;
+    margin-left: 4px;
+  }
+  & .p-toast-summary {
+    margin-top: 2px;
+  }
+}

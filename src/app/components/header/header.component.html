@@ -1,0 +1,52 @@
+<header class="header">
+  <div class="header__content app-container">
+    <a routerLink="">
+      <img
+        class="header__logo-desktop"
+        alt="logo-decktop"
+        src="assets/logo_1.svg"
+      />
+
+      <img
+        class="header__logo-mobile"
+        alt="logo-mobile"
+        src="assets/logo-mobile.png"
+      />
+    </a>
+
+    @if (!isAuth) {
+    <div class="header__btn-group">
+      <button class="btn btn-plain" (click)="showLoginModal()">Войти</button>
+      <button class="btn btn-primary" (click)="showRegistrationModal()">
+        Регистрация
+      </button>
+    </div>
+    } @else {
+    <div class="header__profile-wrap">
+      @if (!isProfilePage) {
+      <span class="header__balance">
+        Баланс:
+        <span class="header__balance-count"> 90₽</span>
+      </span>
+      <a routerLink="profile">
+        <div class="header__profile">
+          <img
+            class="header__profile--icon"
+            alt="profile"
+            src="assets/profile-circle.png"
+          />
+        </div>
+      </a>
+      <div class="header__logout">
+        <!-- @click="logout()" -->
+        <img
+          class="header__profile--icon"
+          alt="profile"
+          src="assets/logout.png"
+        />
+      </div>
+      }
+    </div>
+    }
+  </div>
+</header>

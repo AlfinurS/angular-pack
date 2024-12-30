@@ -1,0 +1,327 @@
+<div class="app-container home">
+  <div class="home__form">
+    <p-fileUpload
+      #fileUploadRef
+      [customUpload]="true"
+      [multiple]="isMultipleUploading"
+      [showUploadButton]="false"
+      [showCancelButton]="false"
+      maxFileSize="1000000"
+    >
+      <ng-template pTemplate="content">
+        <div *ngIf="uploadedFiles.length === 0" class="home__upload">
+          <div class="home__upload-content">
+            <img alt="logo" src="../assets/img/upload.png" />
+            <button
+              class="btn btn-primary home__upload-btn"
+              (click)="openFileDialog()"
+              pButton
+            >
+              Выберите файл для загрузки
+            </button>
+            <span class="home__upload-rules">{{ uploadRulesText }}</span>
+          </div>
+        </div>
+        <!-- Отображение списка загруженных файлов -->
+        <div *ngIf="uploadedFiles.length">
+          <div class="home__uploading">
+            <div class="home__uploading-head">Идет анализ файлов:</div>
+          </div>
+          <div class="home__uploading-file" *ngFor="let file of uploadedFiles">
+            <div class="home__uploading-name">
+              <span>{{ file.filename }}</span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-fileUpload>
+
+    <input
+      #fileInput
+      type="file"
+      [multiple]="isMultipleUploading"
+      (change)="handleFileInput($event)"
+      style="display: none"
+    />
+
+    <div *ngIf="uploadedFiles.length">
+      <div class="home__uploading">
+        <div class="home__uploading-head">Идет анализ файлов:</div>
+      </div>
+      <div class="home__uploading-file" *ngFor="let file of uploadedFiles">
+        <div class="home__uploading-name">
+          <span>{{ file.filename }}</span>
+        </div>
+      </div>
+      <!-- <div class="progress-bar">
+        <div
+          class="progress-bar__inner"
+          :style="{
+            width: state.progress + '%',
+          }"
+        ></div>
+      </div>
+      <div class="progress-bar__counter">
+        {{ state.finishedRequsts }}&nbsp;/&nbsp;{{ filesData.length }}
+      </div> -->
+    </div>
+
+    <!-- <div v-show="filesData.length !== 0">
+      <div class="home__uploading">
+        <div class="home__uploading-head">Идет анализ файлов:</div>
+      </div>
+      <div
+        class="home__uploading-file"
+        v-for="(file, index) in filesData"
+        :key="index"
+      >
+        <div class="home__uploading-name">
+          <span>{{ file.name }}</span>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div
+          class="progress-bar__inner"
+          :style="{
+            width: state.progress + '%',
+          }"
+        ></div>
+      </div>
+      <div class="progress-bar__counter">
+        {{ state.finishedRequsts }}&nbsp;/&nbsp;{{ filesData.length }}
+      </div>
+    </div> -->
+
+    <!-- <div
+      class="home__upload-results upload-results"
+      v-if="Object.keys(form.uploadDocsData).length"
+    >
+      <p class="upload-results__key-title">
+        Результаты анализа загруженных документов:
+      </p>
+      <ul class="upload-results__search-list">
+        <li v-for="document in form.uploadDocsData" :key="document.filename">
+          <div class="upload-results__search-docs-list">
+            <div class="upload-results__search-item">
+              <div class="upload-results__search-item-content">
+                <ul class="upload-results__search-content-wtapper">
+                  <li class="upload-results__search-item-doc-wrapper">
+                    <QExpansionItem>
+                      <template v-slot:header>
+                        <div class="upload-results__search-export-wrapp">
+                          <span class="upload-results__search-item-doc">
+                            {{ document.filename }}
+                          </span>
+                          <div class="upload-results__search-export-btn">
+                            <span
+                              class="upload-results__search-export-name"
+                              @click="downloadFile"
+                              >Экспортировать в Excel</span
+                            >
+                            <iconExcel />
+                          </div>
+                        </div>
+                      </template>
+                      <div
+                        class="upload-results__search-content"
+                        v-for="page in document.pages"
+                        :key="page.id"
+                      >
+                        <div class="upload-results__search-item-doc">
+                          Страница {{ page.page_number }}:
+                          <template v-if="page.document_types.length > 0">
+                            <span
+                              v-for="(type, index) in page.document_types"
+                              :key="index"
+                            >
+                              {{ type }}
+                            </span>
+                          </template>
+                          <template v-else>
+                            <span class="upload-results__search-export-name"
+                              >Типа документа и его параметры не
+                              определены</span
+                            >
+                          </template>
+                        </div>
+                        <div class="upload-results__search-table">
+                          <div class="upload-results__search-row">
+                            <div
+                              class="upload-results__search-cell upload-results__search-cell--left"
+                            >
+                              Ключи поиска
+                            </div>
+                            <div class="upload-results__search-cell">
+                              Тип документа
+                            </div>
+                          </div>
+                          <div class="upload-results__search-row">
+                            <div
+                              class="upload-results__search-cell upload-results__search-cell--left"
+                            >
+                              <template v-if="getNumbers(page.order_numbers)">
+                                {{ getNumbers(page.order_numbers) }}
+                              </template>
+                              <template v-else>-</template>
+                            </div>
+                            <div class="upload-results__search-cell">
+                              <template
+                                v-if="getDocTypesLabels(page.document_types)"
+                              >
+                                {{ getDocTypesLabels(page.document_types) }}
+                              </template>
+                              <template v-else>-</template>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </QExpansionItem>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div> -->
+
+    <!-- <div class="home__filter" v-if="isAuth">
+      <p class="home__key-title">Введите ключ для поиска внутри докуметов</p>
+      <QInput
+        outlined
+        v-model="form.search"
+        @update:model-value="handleSearch"
+        class="home__key-input"
+      >
+        <template v-slot:prepend>
+          <iconSearch iconColor="#00A1FF"></iconSearch>
+        </template>
+        <template v-slot:append>
+          <iconClear
+            class="cursor-pointer"
+            v-if="form.search"
+            iconColor="#212121D9"
+            @click="(form.dataSearch = {}), (form.search = '')"
+          ></iconClear>
+        </template>
+      </QInput>
+      <div class="home__search-list" v-if="form.search">
+        <div
+          class="home__search-item"
+          v-for="document in form.dataSearch"
+          :key="document.filename"
+        >
+          <span class="home__search-item-title">{{ document.filename }}</span>
+          <div class="home__search-item-content">
+            <div
+              class="home__search-content-wtapper"
+              v-for="(pages, index) in document.pages"
+              :key="index"
+            >
+              <QExpansionItem>
+                <template v-slot:header>
+                  <div class="home__search-item-text">
+                    <span class="home__search-item-doc">
+                      Страница {{ pages.page_number }};
+                    </span>
+
+                    <div v-if="pages.document_info.order_numbers.length > 0">
+                      <span
+                        class="home__search-item-doc home__search-item-doc--number"
+                        v-for="(item, index) in pages.document_info
+                          .order_numbers"
+                        :key="index"
+                        >№&nbsp;
+                        {{ item }}
+                      </span>
+                    </div>
+
+                    <div
+                      v-if="pages.document_info.document_types.length > 0"
+                      class="home__list-content"
+                    >
+                      <span class="home__search-item-doc">
+                        {{
+                          getDocTypesLabels(
+                            pages.document_info.document_types
+                          )
+                        }}
+                      </span>
+                    </div>
+
+                    <span v-else class="home__search-item-doc">
+                      тип документа не определен
+                    </span>
+                  </div>
+                </template>
+                <div class="home__search-content">
+                  <div class="home__search-table">
+                    <div
+                      class=""
+                      v-for="(item, index) in pages.lines"
+                      :key="index"
+                    >
+                      <div class="home__search-cell">
+                        {{ item }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </QExpansionItem>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home__expansion">
+        <div class="home__expansion-item-wrapper">
+          <QExpansionItem>
+            <template v-slot:header>
+              <span class="home__expansion-item">Типы документов</span>
+            </template>
+
+            <div class="home__expansion-types-btns">
+              <div
+                v-for="(type, index) in dataStore.allDocumentTypes"
+                :key="index"
+                class="home__expansion-type--btn"
+              >
+                <template v-if="type.document_type">
+                  <div
+                    class="home__expansion-btn--blue"
+                    @mouseover="hoverStates[index] = true"
+                    @mouseleave="hoverStates[index] = false"
+                    @click="showModalParams(type)"
+                  >
+                    <div class="home__expansion-top--wrapp">
+                      <iconPaper
+                        :iconColor="
+                          hoverStates[index] ? '#ffffff' : '#075988'
+                        "
+                      />
+                      {{ type.document_type }}
+                    </div>
+                    <div class="home__expansion-btn--close">
+                      <iconClose
+                        class="btn red"
+                        @click.stop="showDeleteTypeModal(type)"
+                      />
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+
+            <div class="home__expansion-btns-wrapp">
+              <ButtonComponent
+                button-class="btn btn-primary"
+                text="Добавить тип"
+                @click="showAddTypeModal()"
+              />
+            </div>
+          </QExpansionItem>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>

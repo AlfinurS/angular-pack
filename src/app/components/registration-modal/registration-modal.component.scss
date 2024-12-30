@@ -1,0 +1,60 @@
+.modal {
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+  }
+  &__btn {
+    width: 100%;
+  }
+  &__title {
+    max-width: 560px;
+    width: 100%;
+    word-break: break-word;
+  }
+  &__label {
+    max-width: 560px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    padding-top: 8px;
+    margin-bottom: 16px;
+  }
+  &__field-wrapper {
+    width: 480px;
+    position: relative;
+  }
+  &__field-error {
+    position: absolute;
+    bottom: -23px;
+    left: 0px;
+    font-size: 11px;
+  }
+  &__input-code {
+    display: flex;
+    flex-shrink: 0;
+  }
+  &__input-code-prefix {
+    background: #f3f4f6;
+    color: #6b7280;
+    border-top: 1px solid #d1d5db;
+    border-left: 1px solid #d1d5db;
+    border-bottom: 1px solid #d1d5db;
+    padding: 8px;
+    flex-shrink: 0;
+    height: 35px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 28px;
+}
