@@ -2,13 +2,19 @@ import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { catchError, filter, from, switchMap } from 'rxjs';
 import { testConf } from '../config';
+import { AuthApiService } from '../app/api/auth.api.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authApiService = inject(AuthApiService);
   const baseUrl = testConf.api;
-  const authReq = req.clone({
+  let authReq = req.clone({
     url: `${baseUrl}${req.url}`,
-    //headers: req.headers.set('Authorization', `Bearer${authToken}`),
   });
+  if (authApiService.token) {
+    authReq = authReq.clone({
+      headers: authReq.headers.set('auth-token', authApiService.token),
+    });
+  }
   return next(authReq).pipe(
     catchError((err) => {
       if (err) {

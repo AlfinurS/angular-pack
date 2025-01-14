@@ -16,7 +16,8 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorFormTextPipe } from '../../pipes/error-form-text.pipe';
 import { AuthApiService } from '../../api/auth.api.service';
-import { Subscription, catchError, EMPTY } from 'rxjs';
+import { Subscription, catchError, EMPTY, switchMap } from 'rxjs';
+import { Router } from '@angular/router';
 
 export interface IDataModal {}
 @Component({
@@ -42,10 +43,10 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   form = new FormGroup({
-    contact_info: new FormControl<string>('', Validators.required),
+    email: new FormControl<string>('', Validators.required),
     password: new FormControl<string>('', Validators.required),
   });
-
+  router: Router = inject(Router);
   ngOnInit(): void {}
 
   close(): void {
@@ -53,22 +54,27 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    //const params = this.form.value;
     const params = {
-      contact_info: this.form.controls.contact_info.value,
+      email: this.form.controls.email.value,
       password: this.form.controls.password.value,
     };
     this.loading = true;
     this.subscriptions.push(
       this.authApiService
-        .getUser(params)
+        .getTokens(params)
         .pipe(
-          catchError(() => {
+          switchMap((_tokens) => {
+            return this.authApiService.getDataUser();
+          }),
+          catchError((error) => {
             this.loading = false;
             return EMPTY;
           })
         )
         .subscribe((res) => {
+          this.authApiService.profile.next(res);
+          console.log(res);
+          this.router.navigate(['nomenclature']);
           this.dialogRef.close(true);
           this.form.reset();
         })

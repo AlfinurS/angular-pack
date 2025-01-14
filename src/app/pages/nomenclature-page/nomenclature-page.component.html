@@ -1,0 +1,29 @@
+<div class="tab-items-list">
+  <div class="tab-items-list__create">
+    <span class="tab-items-list__create-text">Ещё нет номенклатуры.</span>
+    <span class="tab-items-list__create-text">
+      Создайте новую или загрузите через Excel.
+    </span>
+
+    <div class="tab-items-list__btns-group">
+      <div>
+        <button class="btn btn-primary">Создать новую</button>
+      </div>
+
+      <div>
+        <input type="file" ref="fileRef" hidden />
+        <button class="btn btn-primary tab-items-list__btn">
+          Загрузить из Excel
+        </button>
+      </div>
+      <div>
+        <button
+          class="btn btn-primary tab-items-list__btn"
+          :disabled="state.preloader"
+        >
+          Скачать шаблон
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

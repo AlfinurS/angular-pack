@@ -40,20 +40,16 @@ export type Response<T> = {
 
 export type ApiResponse<T> = Promise<Response<T>>;
 
-export type UserLoginResponse = {
-  token: TokenType;
-  user_id: number;
-  contact_info: string;
-};
+export interface AuthResponse {
+  access_token: string;
+  refresh_token: string;
+}
 
 export type userType = {
-  email?: string;
-  id?: number | undefined;
-  last_name?: string;
-  name?: string;
-  phone?: string;
-  role?: string;
-  token: TokenType;
+  id: number;
+  email: string;
+  is_active: boolean;
+  newbie?: boolean;
 };
 
 export interface ISearchDocument {

@@ -6,17 +6,16 @@
   <div class="modal__modal-content">
     <form [formGroup]="form" style="width: 100%">
       <div class="modal__field-wrapper">
-        <label for="contact_info">Email</label>
+        <label for="email">Email</label>
         <input
           pInputText
           placeholder="Email"
-          formControlName="contact_info"
-          id="contact_info"
+          formControlName="email"
+          id="email"
         />
-        @if(form.controls.contact_info.errors &&
-        form.controls.contact_info.dirty) {
+        @if(form.controls.email.errors && form.controls.email.dirty) {
         <span class="modal__field-error">
-          {{ form.controls.contact_info.errors | errorFormText }}
+          {{ form.controls.email.errors | errorFormText }}
         </span>
         }
       </div>
@@ -43,7 +42,7 @@
 <!-- Блок кнопок -->
 <mat-dialog-actions>
   <div class="modal__actions">
-    <button class="btn btn-plain" (click)="close()">Отмена</button>
+    <button class="btn btn-primary" (click)="close()">Отмена</button>
     <button
       class="btn btn-primary"
       (click)="submit()"
