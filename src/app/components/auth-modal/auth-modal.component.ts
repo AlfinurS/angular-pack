@@ -47,11 +47,8 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     password: new FormControl<string>('', Validators.required),
   });
   router: Router = inject(Router);
-  ngOnInit(): void {}
 
-  close(): void {
-    this.dialogRef.close();
-  }
+  ngOnInit(): void {}
 
   submit(): void {
     const params = {
@@ -68,17 +65,22 @@ export class AuthModalComponent implements OnInit, OnDestroy {
           }),
           catchError((error) => {
             this.loading = false;
+            //добавить showError
             return EMPTY;
           })
         )
         .subscribe((res) => {
+          this.loading = false;
           this.authApiService.profile.next(res);
-          console.log(res);
           this.router.navigate(['nomenclature']);
           this.dialogRef.close(true);
           this.form.reset();
         })
     );
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 
   ngOnDestroy(): void {

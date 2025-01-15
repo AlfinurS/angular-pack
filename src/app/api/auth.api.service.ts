@@ -19,10 +19,7 @@ export class AuthApiService {
   refreshToken: string | null = null;
 
   get isAuth(): boolean {
-    if (!this.token) {
-      this.token = this.cookieService.get('token');
-    }
-    return !!this.token;
+    return Boolean(this.profile?.value?.email);
   }
 
   getTokens(params: object): Observable<AuthResponse> {
