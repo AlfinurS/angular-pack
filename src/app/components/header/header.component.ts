@@ -1,17 +1,6 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {
-  GuardsCheckEnd,
-  Router,
-  RouterLink,
-  ActivatedRoute,
-} from '@angular/router';
+import { GuardsCheckEnd, Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthApiService } from '../../api/auth.api.service';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';

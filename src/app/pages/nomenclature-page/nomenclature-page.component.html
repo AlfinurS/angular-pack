@@ -1,4 +1,4 @@
-<div class="tab-items-list">
+<div class="tab-items-list" *ngIf="!isAuth">
   <div class="tab-items-list__create">
     <span class="tab-items-list__create-text">Ещё нет номенклатуры.</span>
     <span class="tab-items-list__create-text">
@@ -7,7 +7,9 @@
 
     <div class="tab-items-list__btns-group">
       <div>
-        <button class="btn btn-primary">Создать новую</button>
+        <button class="btn btn-primary" (click)="showNomenclatureModal()">
+          Создать новую
+        </button>
       </div>
 
       <div>
