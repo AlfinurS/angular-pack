@@ -12,6 +12,7 @@
           placeholder="Email"
           formControlName="email"
           id="contact_info"
+          autocomplete="off"
         />
         @if(form.controls.email.errors && form.controls.email.dirty) {
         <span class="modal__field-error">
@@ -28,6 +29,7 @@
           formControlName="password"
           id="password"
           type="password"
+          autocomplete="off"
         />
         @if(form.controls.password.errors && form.controls.password.dirty) {
         <span class="modal__field-error">
@@ -43,7 +45,8 @@
           placeholder="Пароль"
           formControlName="repeatPassword"
           id="repeatPassword"
-          type="repeatPassword"
+          type="password"
+          autocomplete="off"
         />
         @if(form.controls.repeatPassword.errors &&
         form.controls.repeatPassword.dirty) {
