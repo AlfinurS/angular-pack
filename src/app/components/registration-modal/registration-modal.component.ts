@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormControl,
@@ -16,11 +22,13 @@ import {
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle,
+  MatDialog,
 } from '@angular/material/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorFormTextPipe } from '../../pipes/error-form-text.pipe';
 import { AuthApiService } from '../../api/auth.api.service';
-import { Subscription, catchError, EMPTY } from 'rxjs';
+import { Subscription, catchError, EMPTY, switchMap } from 'rxjs';
+import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 
 export interface IDataModal {}
 @Component({
@@ -41,8 +49,10 @@ export interface IDataModal {}
 })
 export class RegistrationModalComponent implements OnInit, OnDestroy {
   readonly dialogRef = inject(MatDialogRef<RegistrationModalComponent>);
+  readonly dialog = inject(MatDialog);
   readonly data = inject<IDataModal>(MAT_DIALOG_DATA);
   readonly authApiService = inject(AuthApiService);
+  readonly cdr = inject(ChangeDetectorRef);
   loading: boolean = false;
   subscriptions: Subscription[] = [];
 
@@ -59,7 +69,7 @@ export class RegistrationModalComponent implements OnInit, OnDestroy {
   };
 
   form = new FormGroup({
-    contact_info: new FormControl<string>('', Validators.required),
+    email: new FormControl<string>('', Validators.required),
     password: new FormControl<string>('', Validators.required),
     repeatPassword: new FormControl<string>('', [
       Validators.required,
@@ -74,11 +84,9 @@ export class RegistrationModalComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    //const params = this.form.value;
     const params = {
-      contact_info: this.form.controls.contact_info.value,
+      email: this.form.controls.email.value,
       password: this.form.controls.password.value,
-      repeatPassword: this.form.controls.repeatPassword.value,
     };
     this.loading = true;
     this.subscriptions.push(
@@ -91,12 +99,27 @@ export class RegistrationModalComponent implements OnInit, OnDestroy {
           })
         )
         .subscribe((res) => {
+          this.loading = false;
           this.dialogRef.close(true);
+          this.showLoginModal();
           this.form.reset();
         })
     );
   }
 
+  showLoginModal(): void {
+    const dialogAuthRef = this.dialog.open(AuthModalComponent, {
+      autoFocus: 'none',
+    });
+    this.subscriptions.push(
+      dialogAuthRef.afterClosed().subscribe((res) => {
+        if (res) {
+          console.log(res);
+        }
+      })
+    );
+    this.cdr.detectChanges();
+  }
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();

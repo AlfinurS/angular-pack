@@ -13,7 +13,7 @@ import {
   ActivatedRoute,
 } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-/* import { AuthService } from '../../auth/auth.service'; */
+import { AuthApiService } from '../../api/auth.api.service';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 import { RegistrationModalComponent } from '../../components/registration-modal/registration-modal.component';
 
@@ -26,19 +26,18 @@ import { RegistrationModalComponent } from '../../components/registration-modal/
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public isHomePage: boolean = true;
-  public isProfilePage: boolean = false;
   private subscriptions: Subscription[] = [];
   isAuth: boolean = false;
 
   constructor(
     private readonly dialog: MatDialog,
-    //private authService: AuthService,
+    private readonly authService: AuthApiService,
     private router: Router,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    //this.profile = this.authService.profile.getValue();
+    this.isAuth = this.authService.isAuth;
     this.handleLocation(this.router.url);
 
     this.subscriptions.push(
@@ -46,6 +45,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (event instanceof GuardsCheckEnd) {
           this.handleLocation(event.url);
         }
+      })
+    );
+
+    this.subscriptions.push(
+      this.authService.profile.subscribe((profile) => {
+        this.isAuth = !!profile;
+        this.cdr.detectChanges();
       })
     );
   }
@@ -76,9 +82,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  logout(): void {
+    this.authService.profile.next(null);
+    this.authService.token = null;
+    this.authService.refreshToken = null;
+    this.router.navigate(['home-page']);
+  }
+
   handleLocation(url: string): void {
-    this.isHomePage = url === '/';
-    this.isProfilePage = url === '/profile';
+    this.isHomePage = url === 'home-page';
     this.cdr.detectChanges();
   }
 

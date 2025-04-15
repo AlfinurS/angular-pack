@@ -15,6 +15,11 @@ export interface errorsObjectType {
   non_field_errors: string[];
 }
 
+export interface IErrorModalData {
+  title: string;
+  text: string;
+}
+
 export type TokenType = string;
 
 export type snackbarType = {

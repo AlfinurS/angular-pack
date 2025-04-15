@@ -11,6 +11,10 @@
         Регистрация
       </button>
     </div>
+    } @if (isAuth) {
+    <div class="header__btn-group">
+      <button class="btn btn-primary" (click)="logout()">Выйти</button>
+    </div>
     }
   </div>
 </header>

@@ -16,7 +16,7 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorFormTextPipe } from '../../pipes/error-form-text.pipe';
 import { AuthApiService } from '../../api/auth.api.service';
-import { Subscription, catchError, EMPTY, switchMap } from 'rxjs';
+import { Subscription, catchError, EMPTY, switchMap, delay } from 'rxjs';
 import { Router } from '@angular/router';
 
 export interface IDataModal {}
@@ -60,12 +60,13 @@ export class AuthModalComponent implements OnInit, OnDestroy {
       this.authApiService
         .getTokens(params)
         .pipe(
+          delay(100),
           switchMap((_tokens) => {
             return this.authApiService.getDataUser();
           }),
           catchError((error) => {
             this.loading = false;
-            //добавить showError
+            this.form.setErrors({ serverError: error.error.detail });
             return EMPTY;
           })
         )

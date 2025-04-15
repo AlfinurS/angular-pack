@@ -2,7 +2,7 @@ interface IConfig {
   api: string;
 }
 export const testConf: IConfig = Object.freeze({
-  api: 'https://packer.yolka.io/',
+  api: 'https://dev.packer.yolka.io/',
 });
 
 export function getConfig(): IConfig {

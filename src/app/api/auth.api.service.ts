@@ -10,11 +10,10 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AuthApiService {
   constructor(private readonly http: HttpClient) {}
-  cookieService = inject(CookieService);
-
   public profile: BehaviorSubject<userType | null> =
     new BehaviorSubject<userType | null>(null);
 
+  cookieService = inject(CookieService);
   token: string | null = null;
   refreshToken: string | null = null;
 
@@ -27,8 +26,24 @@ export class AuthApiService {
       tap((response: AuthResponse) => {
         this.token = response.access_token;
         this.refreshToken = response.refresh_token;
-        this.cookieService.set('token', this.token);
-        this.cookieService.set('refreshToken', this.refreshToken);
+        this.cookieService.set(
+          'access_token',
+          this.token,
+          undefined,
+          '/',
+          '',
+          false,
+          'Lax'
+        );
+        this.cookieService.set(
+          'refresh_token',
+          this.refreshToken,
+          undefined,
+          '/',
+          '',
+          true,
+          'Lax'
+        );
       })
     );
   }

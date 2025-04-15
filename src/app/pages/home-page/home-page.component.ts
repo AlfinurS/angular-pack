@@ -30,7 +30,6 @@ export class HomePageComponent {
 
   constructor(
     private readonly dialog: MatDialog,
-    //private authService: AuthService,
     private router: Router,
     private readonly cdr: ChangeDetectorRef
   ) {}
