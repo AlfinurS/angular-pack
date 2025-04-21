@@ -18,6 +18,7 @@ import { ErrorFormTextPipe } from '../../pipes/error-form-text.pipe';
 import { AuthApiService } from '../../api/auth.api.service';
 import { Subscription, catchError, EMPTY, switchMap, delay } from 'rxjs';
 import { Router } from '@angular/router';
+import { CheckboxComponent } from '../../components/ui/checkbox/checkbox.component';
 
 export interface IDataModal {}
 @Component({
@@ -31,6 +32,7 @@ export interface IDataModal {}
     ReactiveFormsModule,
     InputTextModule,
     ErrorFormTextPipe,
+    CheckboxComponent,
   ],
   templateUrl: './auth-modal.component.html',
   styleUrl: './auth-modal.component.scss',
@@ -45,6 +47,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   form = new FormGroup({
     email: new FormControl<string>('', Validators.required),
     password: new FormControl<string>('', Validators.required),
+    rememberMe: new FormControl<boolean>(false),
   });
   router: Router = inject(Router);
 
@@ -54,6 +57,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     const params = {
       email: this.form.controls.email.value,
       password: this.form.controls.password.value,
+      rememberMe: this.form.controls.rememberMe.value,
     };
     this.loading = true;
     this.subscriptions.push(

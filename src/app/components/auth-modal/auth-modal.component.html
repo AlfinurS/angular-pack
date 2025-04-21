@@ -37,8 +37,13 @@
       </div>
     </form>
   </div>
-</mat-dialog-content>
 
+  <div class="modal__field-wrapper">
+    <app-checkbox [formControl]="form.controls.rememberMe" color="primary">
+      Запомнить меня
+    </app-checkbox>
+  </div>
+</mat-dialog-content>
 <!-- Блок кнопок -->
 <mat-dialog-actions>
   <div class="modal__actions">
