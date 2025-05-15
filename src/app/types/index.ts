@@ -119,3 +119,9 @@ export interface IUpload {
 export interface IUploadResponse {
   pages: IUpload[];
 }
+
+export interface LoginParams {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+}

@@ -9,7 +9,7 @@ import {
   throwError,
 } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AuthResponse, userType } from '../types';
+import { AuthResponse, userType, LoginParams } from '../types';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -28,27 +28,30 @@ export class AuthApiService {
     return Boolean(this.profile?.value?.email);
   }
 
-  getTokens(params: object): Observable<AuthResponse> {
+  getTokens(params: LoginParams): Observable<AuthResponse> {
+    const expirationDays = params.rememberMe ? 7 : undefined;
+
     return this.http.post<AuthResponse>('api/auth/login', params).pipe(
       tap((response: AuthResponse) => {
         this.token = response.access_token;
         this.refreshToken = response.refresh_token;
+
         this.cookieService.set(
           'access_token',
           this.token,
-          undefined,
+          expirationDays,
           '/',
-          '',
+          undefined,
           false,
           'Lax'
         );
         this.cookieService.set(
           'refresh_token',
           this.refreshToken,
-          undefined,
+          expirationDays,
           '/',
-          '',
-          true,
+          undefined,
+          false,
           'Lax'
         );
       })
@@ -57,9 +60,7 @@ export class AuthApiService {
 
   refreshTokenRequest(refreshToken: string): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>('api/auth/refresh', {
-        refresh_token: refreshToken,
-      })
+      .post<AuthResponse>(`api/auth/refresh?refresh_token=${refreshToken}`, {})
       .pipe(
         tap((response) => {
           this.token = response.access_token;
@@ -69,7 +70,7 @@ export class AuthApiService {
             this.token,
             undefined,
             '/',
-            '',
+            undefined,
             false,
             'Lax'
           );
@@ -78,10 +79,16 @@ export class AuthApiService {
             this.refreshToken,
             undefined,
             '/',
-            '',
-            true,
+            undefined,
+            false,
             'Lax'
           );
+        }),
+        catchError((error) => {
+          if (error.error) {
+            console.error('Error details:', error.error);
+          }
+          throw error;
         })
       );
   }
@@ -97,12 +104,15 @@ export class AuthApiService {
 
   restoreSession(): Observable<userType | null> {
     const refreshToken = this.cookieService.get('refresh_token');
+
     if (!refreshToken) {
+      console.log('No refresh token found in cookies');
       return throwError(() => new Error('No refresh token'));
     }
+
     return this.refreshTokenRequest(refreshToken).pipe(
       switchMap(() => this.getDataUser()),
-      catchError(() => {
+      catchError((error) => {
         this.logout();
         return throwError(() => new Error('Session restore failed'));
       })

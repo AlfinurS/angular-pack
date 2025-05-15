@@ -49,7 +49,7 @@ export class NomenclatureModalComponent implements OnInit, OnDestroy {
   router: Router = inject(Router);
 
   ngOnInit(): void {}
-
+  /* 
   submit(): void {
     const params = {
       email: this.form.controls.email.value,
@@ -78,7 +78,7 @@ export class NomenclatureModalComponent implements OnInit, OnDestroy {
           this.form.reset();
         })
     );
-  }
+  } */
 
   close(): void {
     this.dialogRef.close();

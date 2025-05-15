@@ -19,6 +19,7 @@ import { AuthApiService } from '../../api/auth.api.service';
 import { Subscription, catchError, EMPTY, switchMap, delay } from 'rxjs';
 import { Router } from '@angular/router';
 import { CheckboxComponent } from '../../components/ui/checkbox/checkbox.component';
+import { LoginParams } from '../../types';
 
 export interface IDataModal {}
 @Component({
@@ -45,19 +46,25 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   form = new FormGroup({
-    email: new FormControl<string>('', Validators.required),
-    password: new FormControl<string>('', Validators.required),
-    rememberMe: new FormControl<boolean>(false),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    rememberMe: new FormControl(false, { nonNullable: true }),
   });
   router: Router = inject(Router);
 
   ngOnInit(): void {}
 
   submit(): void {
-    const params = {
-      email: this.form.controls.email.value,
-      password: this.form.controls.password.value,
-      rememberMe: this.form.controls.rememberMe.value,
+    const params: LoginParams = {
+      email: this.form.controls.email.value ?? '',
+      password: this.form.controls.password.value ?? '',
+      rememberMe: this.form.controls.rememberMe.value ?? false,
     };
     this.loading = true;
     this.subscriptions.push(
