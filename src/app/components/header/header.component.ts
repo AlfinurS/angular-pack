@@ -4,6 +4,7 @@ import { GuardsCheckEnd, Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthApiService } from '../../api/auth.api.service';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
+import { userType } from '../../types';
 import { RegistrationModalComponent } from '../../components/registration-modal/registration-modal.component';
 
 @Component({
@@ -15,8 +16,10 @@ import { RegistrationModalComponent } from '../../components/registration-modal/
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public isHomePage: boolean = true;
+  public isAuth: boolean = false;
+  public user: userType | null = null;
+
   private subscriptions: Subscription[] = [];
-  isAuth: boolean = false;
 
   constructor(
     private readonly dialog: MatDialog,
@@ -38,8 +41,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.authService.profile.subscribe((profile) => {
+      this.authService.profile$.subscribe((profile) => {
         this.isAuth = !!profile;
+        this.user = profile;
         this.cdr.detectChanges();
       })
     );
@@ -49,12 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AuthModalComponent, {
       autoFocus: 'none',
     });
-    this.subscriptions.push(
-      dialogRef.afterClosed().subscribe((res) => {
-        if (res) {
-        }
-      })
-    );
+    this.subscriptions.push(dialogRef.afterClosed().subscribe());
     this.cdr.detectChanges();
   }
 
@@ -62,17 +61,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(RegistrationModalComponent, {
       autoFocus: 'none',
     });
-    this.subscriptions.push(
-      dialogRef.afterClosed().subscribe((res) => {
-        if (res) {
-        }
-      })
-    );
+    this.subscriptions.push(dialogRef.afterClosed().subscribe());
     this.cdr.detectChanges();
   }
 
   logout(): void {
-    this.authService.profile.next(null);
+    this.authService.logout();
     this.authService.token = null;
     this.authService.refreshToken = null;
     this.router.navigate(['home-page']);

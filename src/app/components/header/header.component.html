@@ -11,7 +11,8 @@
         Регистрация
       </button>
     </div>
-    } @if (isAuth) {
+    } @else {
+    <span class="username">Здравствуйте, {{ user?.email }}</span>
     <div class="header__btn-group">
       <button class="btn btn-primary" (click)="logout()">Выйти</button>
     </div>

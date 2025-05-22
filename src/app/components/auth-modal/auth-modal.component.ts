@@ -16,7 +16,15 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorFormTextPipe } from '../../pipes/error-form-text.pipe';
 import { AuthApiService } from '../../api/auth.api.service';
-import { Subscription, catchError, EMPTY, switchMap, delay } from 'rxjs';
+import {
+  Subscription,
+  catchError,
+  EMPTY,
+  switchMap,
+  delay,
+  tap,
+  finalize,
+} from 'rxjs';
 import { Router } from '@angular/router';
 import { CheckboxComponent } from '../../components/ui/checkbox/checkbox.component';
 import { LoginParams } from '../../types';
@@ -61,34 +69,38 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   submit(): void {
+    if (this.form.invalid) return;
+
     const params: LoginParams = {
       email: this.form.controls.email.value ?? '',
       password: this.form.controls.password.value ?? '',
       rememberMe: this.form.controls.rememberMe.value ?? false,
     };
     this.loading = true;
-    this.subscriptions.push(
-      this.authApiService
-        .getTokens(params)
-        .pipe(
-          delay(100),
-          switchMap((_tokens) => {
-            return this.authApiService.getDataUser();
-          }),
-          catchError((error) => {
-            this.loading = false;
-            this.form.setErrors({ serverError: error.error.detail });
-            return EMPTY;
-          })
-        )
-        .subscribe((res) => {
-          this.loading = false;
-          this.authApiService.profile.next(res);
+
+    const login$ = this.authApiService.getTokens(params).pipe(
+      delay(100),
+      switchMap(() => this.authApiService.getDataUser()),
+      tap((user) => {
+        if (user) {
           this.router.navigate(['nomenclature']);
           this.dialogRef.close(true);
           this.form.reset();
-        })
+        } else {
+          throw new Error('User data not found');
+        }
+      }),
+      catchError((error) => {
+        this.form.setErrors({
+          serverError: error?.error?.detail || 'Ошибка входа',
+        });
+        return EMPTY;
+      }),
+      finalize(() => {
+        this.loading = false;
+      })
     );
+    this.subscriptions.push(login$.subscribe());
   }
 
   close(): void {

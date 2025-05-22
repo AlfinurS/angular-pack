@@ -26,7 +26,7 @@ export class NomenclaturePageComponent {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.authService.profile.subscribe((profile) => {
+      this.authService.profile$.subscribe((profile) => {
         this.isAuth = profile?.is_active ?? false;
         this.cdr.detectChanges();
       })

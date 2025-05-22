@@ -17,15 +17,15 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AuthApiService {
   constructor(private readonly http: HttpClient) {}
-  public profile: BehaviorSubject<userType | null> =
-    new BehaviorSubject<userType | null>(null);
+  private _profile = new BehaviorSubject<userType | null>(null);
+  public readonly profile$ = this._profile.asObservable();
 
   cookieService = inject(CookieService);
   token: string | null = null;
   refreshToken: string | null = null;
 
   get isAuth(): boolean {
-    return Boolean(this.profile?.value?.email);
+    return !!this._profile.value?.email;
   }
 
   getTokens(params: LoginParams): Observable<AuthResponse> {
@@ -95,7 +95,7 @@ export class AuthApiService {
 
   getDataUser(): Observable<userType | null> {
     return this.http.get<userType>('api/auth/me').pipe(
-      tap((user) => this.profile.next(user)),
+      tap((user) => this._profile.next(user)),
       catchError(() => {
         return of(null);
       })
@@ -125,6 +125,6 @@ export class AuthApiService {
   logout(): void {
     this.cookieService.delete('access_token');
     this.cookieService.delete('refresh_token');
-    this.profile.next(null);
+    this._profile.next(null);
   }
 }
