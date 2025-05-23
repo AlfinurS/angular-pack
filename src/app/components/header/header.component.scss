@@ -1,5 +1,6 @@
 .header {
   background-color: var(--background-2);
+  border-bottom: 1px solid var(--primary);
   max-width: 1920px;
   margin: 0 auto;
   padding-left: 40px;
@@ -29,5 +30,63 @@
     height: 100%;
     align-items: center;
     column-gap: 16px;
+  }
+  &__login--name {
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17px;
+  }
+  &__icon {
+    color: var(--primary);
+    font-size: 32px;
+  }
+}
+.header__popover-wrapper {
+  position: relative;
+  display: inline-block;
+
+  &:hover .header__popover,
+  .header__popover:hover {
+    display: flex;
+  }
+}
+.header__popover {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0px;
+  transform: translateX(-50%);
+  width: 290px;
+  background-color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 16px;
+  padding-bottom: 8px;
+  z-index: 1000;
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.header__popover-button {
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+  color: var(--primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  &:hover {
+    color: var(--primary-hover);
   }
 }

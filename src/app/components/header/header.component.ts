@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { GuardsCheckEnd, Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,7 +11,7 @@ import { RegistrationModalComponent } from '../../components/registration-modal/
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -18,9 +19,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public isHomePage: boolean = true;
   public isAuth: boolean = false;
   public user: userType | null = null;
-
   private subscriptions: Subscription[] = [];
 
+  showPopover = false;
   constructor(
     private readonly dialog: MatDialog,
     private readonly authService: AuthApiService,
@@ -63,6 +64,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(dialogRef.afterClosed().subscribe());
     this.cdr.detectChanges();
+  }
+
+  showChangePasswordModal() {
+    // показать модальное окно
   }
 
   logout(): void {

@@ -4,18 +4,43 @@
       <img alt="logo" src="assets/logo.svg" />
     </a>
 
-    @if (!isAuth) {
-    <div class="header__btn-group">
-      <button class="btn btn-primary" (click)="showLoginModal()">Войти</button>
-      <button class="btn btn-primary" (click)="showRegistrationModal()">
-        Регистрация
-      </button>
+    <div *ngIf="!isAuth; else loggedIn">
+      <div class="header__btn-group">
+        <button class="btn btn-primary" (click)="showLoginModal()">
+          Войти
+        </button>
+        <button class="btn btn-primary" (click)="showRegistrationModal()">
+          Регистрация
+        </button>
+      </div>
     </div>
-    } @else {
-    <span class="username">Здравствуйте, {{ user?.email }}</span>
-    <div class="header__btn-group">
-      <button class="btn btn-primary" (click)="logout()">Выйти</button>
-    </div>
-    }
+    <ng-template #loggedIn>
+      <div
+        class="header__popover-wrapper"
+        (mouseenter)="showPopover = true"
+        (mouseleave)="showPopover = false"
+      >
+        <div class="header__popover-container">
+          <div class="header__btn-group">
+            <div class="header__login--name">{{ user?.email }}</div>
+            <span class="pi pi-user header__icon"></span>
+          </div>
+
+          <div class="header__popover" [ngClass]="{ visible: showPopover }">
+            <button
+              (click)="showChangePasswordModal()"
+              class="header__popover-button link"
+            >
+              Изменить пароль
+            </button>
+
+            <div class="header__divider"></div>
+            <button (click)="logout()" class="header__popover-button link">
+              Выйти
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </header>

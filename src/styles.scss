@@ -1,5 +1,6 @@
 @import './app/styles/material.scss';
 @import './app/styles/prime-ng.scss';
+@import 'primeicons/primeicons.css';
 
 * {
   margin: 0;
@@ -53,7 +54,7 @@ ul {
 
 html {
   --background-1: #012464;
-  --background-2: #ffffff;
+  --background-2: #fbfeff;
   --background-3: #f4f8ff;
   --background-4: #1f4282;
   --background-5: #e0e0e0;
@@ -66,7 +67,7 @@ html {
   --primary-btn: #e0ebff;
   --icon-hover: #153878;
   --main-btn: #d1e1ff;
-  --primary-hover: #012464;
+  --primary-hover: #3a5ea0;
   --primary-focus: #012464;
   --disabled: #9a9ea5;
   --black: #212121;
@@ -79,7 +80,7 @@ html {
   color: #2962ffd8;
   cursor: pointer;
   &:hover {
-    color: var(--primary);
+    color: var(--primary-btn);
   }
 }
 .icon {
