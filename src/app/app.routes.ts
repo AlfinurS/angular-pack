@@ -24,10 +24,17 @@ export const routes: Routes = [
       },
 
       {
-        path: 'profile',
+        path: 'rules',
         loadComponent: () =>
-          import('./pages/profile-page/profile-page.component').then(
-            (m) => m.ProfilePageComponent
+          import('./pages/rules-page/rules-page.component').then(
+            (m) => m.RulesPageComponent
+          ),
+      },
+      {
+        path: 'calculations',
+        loadComponent: () =>
+          import('./pages/calculations-page/calculations-page.component').then(
+            (m) => m.CalculationsPageComponent
           ),
       },
     ],

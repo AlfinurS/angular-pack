@@ -41,6 +41,52 @@
     color: var(--primary);
     font-size: 32px;
   }
+  &__menu {
+    &--title {
+      color: var(--primary);
+      font-family: 'Nunito';
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 22px;
+    }
+
+    &--circle {
+      width: 23px;
+      height: 23px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background-color: var(--primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      color: #ffffff;
+    }
+    &--item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    &--link {
+      text-decoration: none;
+
+      &.active .header__menu--title {
+        color: var(--primary);
+      }
+
+      &.active .header__menu--circle {
+        background-color: var(--primary);
+      }
+
+      &:not(.active) .header__menu--title {
+        color: var(--disabled);
+      }
+
+      &:not(.active) .header__menu--circle {
+        background-color: var(--disabled);
+      }
+    }
+  }
 }
 .header__popover-wrapper {
   position: relative;

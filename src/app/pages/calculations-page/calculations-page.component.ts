@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-profile-page',
+  selector: 'app-calculations-page',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './profile-page.component.html',
-  styleUrl: './profile-page.component.scss',
+  templateUrl: './calculations-page.component.html',
+  styleUrl: './calculations-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfilePageComponent {}
+export class CalculationsPageComponent {}

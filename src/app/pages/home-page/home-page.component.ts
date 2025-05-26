@@ -1,19 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { MessageService } from 'primeng/api';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ChangeDetectorRef,
-  inject,
-} from '@angular/core';
-import { HomeApiService } from '../../api/home.api.service';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {
-  GuardsCheckEnd,
-  Router,
-  RouterLink,
-  ActivatedRoute,
-} from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 import { HeaderComponent } from '../../components/header/header.component';
@@ -30,7 +16,6 @@ export class HomePageComponent {
 
   constructor(
     private readonly dialog: MatDialog,
-    private router: Router,
     private readonly cdr: ChangeDetectorRef
   ) {}
 

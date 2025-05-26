@@ -15,6 +15,41 @@
       </div>
     </div>
     <ng-template #loggedIn>
+      <a
+        [routerLink]="['/nomenclature']"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="header__menu--link"
+      >
+        <div class="header__menu--item">
+          <div class="header__menu--circle">1</div>
+          <p class="header__menu--title">Номенклатура</p>
+        </div>
+      </a>
+
+      <a
+        [routerLink]="['/rules']"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="header__menu--link"
+      >
+        <div class="header__menu--item">
+          <div class="header__menu--circle">2</div>
+          <p class="header__menu--title">Правила упаковки</p>
+        </div>
+      </a>
+
+      <a
+        [routerLink]="['/calculations']"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="header__menu--link"
+      >
+        <div class="header__menu--item">
+          <div class="header__menu--circle">3</div>
+          <p class="header__menu--title">Расчёты</p>
+        </div>
+      </a>
       <div
         class="header__popover-wrapper"
         (mouseenter)="showPopover = true"

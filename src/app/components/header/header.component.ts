@@ -1,7 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { GuardsCheckEnd, Router, RouterLink } from '@angular/router';
+import {
+  GuardsCheckEnd,
+  NavigationEnd,
+  Router,
+  ActivatedRoute,
+  RouterModule,
+} from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthApiService } from '../../api/auth.api.service';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
@@ -11,7 +17,7 @@ import { RegistrationModalComponent } from '../../components/registration-modal/
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -20,12 +26,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public isAuth: boolean = false;
   public user: userType | null = null;
   private subscriptions: Subscription[] = [];
-
   showPopover = false;
+
   constructor(
     private readonly dialog: MatDialog,
     private readonly authService: AuthApiService,
     private router: Router,
+    private route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
@@ -35,7 +42,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.router.events.subscribe((event) => {
-        if (event instanceof GuardsCheckEnd) {
+        if (event instanceof NavigationEnd) {
           this.handleLocation(event.url);
         }
       })
@@ -78,7 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   handleLocation(url: string): void {
-    this.isHomePage = url === 'home-page';
+    this.isHomePage = url === '/home-page';
     this.cdr.detectChanges();
   }
 
