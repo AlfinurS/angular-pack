@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -14,6 +15,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { SliderModule } from 'primeng/slider';
 import { ErrorFormTextPipe } from '../../../pipes/error-form-text.pipe';
 import { AuthApiService } from '../../../api/auth.api.service';
 import { Subscription, catchError, EMPTY, switchMap, delay } from 'rxjs';
@@ -30,7 +32,9 @@ export interface IDataModal {}
     MatDialogContent,
     ReactiveFormsModule,
     InputTextModule,
+    SliderModule,
     ErrorFormTextPipe,
+    CommonModule,
   ],
   templateUrl: './nomenclature-modal.component.html',
   styleUrl: './nomenclature-modal.component.scss',
@@ -41,12 +45,24 @@ export class NomenclatureModalComponent implements OnInit, OnDestroy {
   readonly authApiService = inject(AuthApiService);
   loading: boolean = false;
   subscriptions: Subscription[] = [];
+  fragilityLabels: string[] = ['0', '1', '2', '3', '4', '5'];
 
   form = new FormGroup({
-    email: new FormControl<string>('', Validators.required),
-    password: new FormControl<string>('', Validators.required),
+    article: new FormControl<string>('', Validators.required),
+    width: new FormControl<number | null>(null, Validators.required),
+    height: new FormControl<number | null>(null, Validators.required),
+    depth: new FormControl<number | null>(null, Validators.required),
+    barcode: new FormControl<string>('', Validators.required),
+    weight: new FormControl<number | null>(null, Validators.required),
+    max_layer_height: new FormControl<number | null>(null, Validators.required),
+    max_in_layer: new FormControl<number | null>(null, Validators.required),
+    fragility: new FormControl<number>(0, Validators.required),
   });
   router: Router = inject(Router);
+
+  get fragilityControl(): FormControl {
+    return this.form.get('fragility') as FormControl;
+  }
 
   ngOnInit(): void {}
   /* 

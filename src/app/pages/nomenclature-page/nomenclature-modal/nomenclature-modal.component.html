@@ -5,35 +5,126 @@
 <mat-dialog-content>
   <div class="modal__modal-content">
     <form [formGroup]="form" style="width: 100%">
-      <div class="modal__field-wrapper">
-        <label for="email">Email</label>
-        <input
-          pInputText
-          placeholder="Email"
-          formControlName="email"
-          id="email"
-        />
-        @if(form.controls.email.errors && form.controls.email.dirty) {
+      <div class="modal__field narrow">
+        <label for="article" class="modal__label">Артикул</label>
+        <input pInputText formControlName="article" id="article" />
+        @if(form.controls.article.errors && form.controls.article.dirty) {
         <span class="modal__field-error">
-          {{ form.controls.email.errors | errorFormText }}
+          {{ form.controls.article.errors | errorFormText }}
+        </span>
+        }
+      </div>
+      <div class="modal__field narrow">
+        <span class="modal__label">Габариты, см*</span>
+        <div class="modal__size-wrapp narrow">
+          <div class="modal__size-input">
+            <label>Ш:</label>
+            <input pInputText formControlName="width" id="width" type="width" />
+            @if(form.controls.width.errors && form.controls.width.dirty) {
+            <span class="modal__field-error">
+              {{ form.controls.width.errors | errorFormText }}
+            </span>
+            }
+          </div>
+          <div class="modal__size-input">
+            <label>В:</label>
+            <input
+              pInputText
+              formControlName="height"
+              id="height"
+              type="height"
+            />
+            @if(form.controls.height.errors && form.controls.height.dirty) {
+            <span class="modal__field-error">
+              {{ form.controls.height.errors | errorFormText }}
+            </span>
+            }
+          </div>
+          <div class="modal__size-input">
+            <label>Г:</label>
+            <input
+              pInputText
+              formControlName="depth"
+              id="depth"
+              type="number"
+            />
+            @if(form.controls.depth.errors && form.controls.depth.dirty) {
+            <span class="modal__field-error">
+              {{ form.controls.depth.errors | errorFormText }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="modal__field narrow">
+        <label for="barcode" class="modal__label">Штрихкод</label>
+        <input pInputText formControlName="barcode" id="barcode" />
+        @if(form.controls.barcode.errors && form.controls.barcode.dirty) {
+        <span class="modal__field-error">
+          {{ form.controls.barcode.errors | errorFormText }}
         </span>
         }
       </div>
 
-      <div class="modal__field-wrapper">
-        <label for="password">Пароль</label>
-        <input
-          pInputText
-          placeholder="Пароль"
-          formControlName="password"
-          id="password"
-          type="password"
-        />
-        @if(form.controls.password.errors && form.controls.password.dirty) {
+      <div class="modal__field narrow">
+        <label for="weight" class="modal__label">Вес, кг*</label>
+        <input pInputText formControlName="weight" id="weight" />
+        @if(form.controls.weight.errors && form.controls.weight.dirty) {
         <span class="modal__field-error">
-          {{ form.controls.password.errors | errorFormText }}
+          {{ form.controls.weight.errors | errorFormText }}
         </span>
         }
+      </div>
+
+      <div class="modal__field narrow">
+        <label for="max_layer_height" class="modal__label"
+          >Количество слоёв</label
+        >
+        <input
+          pInputText
+          formControlName="max_layer_height"
+          id="max_layer_height"
+        />
+        @if(form.controls.max_layer_height.errors &&
+        form.controls.max_layer_height.dirty) {
+        <span class="modal__field-error">
+          {{ form.controls.max_layer_height.errors | errorFormText }}
+        </span>
+        }
+      </div>
+
+      <div class="modal__field narrow">
+        <label for="max_in_layer" class="modal__label">Количество в слое</label>
+        <input pInputText formControlName="max_in_layer" id="max_in_layer" />
+        @if(form.controls.max_in_layer.errors &&
+        form.controls.max_in_layer.dirty) {
+        <span class="modal__field-error">
+          {{ form.controls.max_in_layer.errors | errorFormText }}
+        </span>
+        }
+      </div>
+      <div class="modal__field narrow modal__field--fragility">
+        <label for="fragility" class="modal__label">Хрупкость*</label>
+        <div class="modal__fragility--text">
+          <span class="gray-btn">Менее хрупкий</span>
+          <span class="gray-btn">Более хрупкий</span>
+        </div>
+        <p-slider
+          [formControl]="fragilityControl"
+          [min]="0"
+          [max]="5"
+          [step]="1"
+          [style]="{ width: '100%' }"
+        ></p-slider>
+        <div class="fragility-labels">
+          <span
+            *ngFor="let label of fragilityLabels; let i = index"
+            class="tick-label"
+          >
+            {{ label }}
+          </span>
+        </div>
       </div>
     </form>
   </div>
@@ -41,14 +132,13 @@
 
 <!-- Блок кнопок -->
 <mat-dialog-actions>
-  <div class="modal__actions">
-    <button class="btn btn-primary" (click)="close()">Отмена</button>
-    <!-- <button
-      class="btn btn-primary"
-      (click)="submit()"
+  <div class="modal__field">
+    <button
+      class="btn btn-primary modal__btn"
+      (click)="close()"
       [disabled]="form.invalid || loading"
     >
-      Войти
-    </button> -->
+      Сохранить
+    </button>
   </div>
 </mat-dialog-actions>
