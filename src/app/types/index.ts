@@ -125,3 +125,22 @@ export interface LoginParams {
   password: string;
   rememberMe?: boolean;
 }
+export interface INomenclature {
+  id: number;
+  article: string;
+  width: number; // Ширина
+  height: number; // Высота
+  depth: number; // глубина
+  weight: number;
+  barcode: string; // Штрихкод
+  fragility: number; //Хрупкость
+  max_layer_height: number; //количество слоёв
+  max_in_layer: number; //количество в слое
+}
+
+export interface IPagination {
+  page: number;
+  page_size: number;
+  total: number;
+  query: string;
+}

@@ -1,5 +1,5 @@
-<div class="tab-items-list" *ngIf="!isAuth">
-  <div class="tab-items-list__create">
+<div class="tab-items-list">
+  <div class="tab-items-list__create" *ngIf="nomenclatureList.length === 0">
     <span class="tab-items-list__create-text">Ещё нет номенклатуры.</span>
     <span class="tab-items-list__create-text">
       Создайте новую или загрузите через Excel.
@@ -27,5 +27,37 @@
         </button>
       </div>
     </div>
+  </div>
+  <div class="tab-items-list__items" *ngIf="nomenclatureList.length > 0">
+    <div *ngFor="let item of nomenclatureList" class="nomenclature-item">
+      <div><strong>Артикул:</strong> {{ item.article }}</div>
+      <div><strong>Штрихкод:</strong> {{ item.barcode }}</div>
+      <div>
+        <strong>Габариты (ШxВxГ):</strong> {{ item.width }}x{{ item.height }}x{{
+          item.depth
+        }}
+      </div>
+      <div><strong>Вес:</strong> {{ item.weight }} кг</div>
+      <div>
+        <strong>Хрупкость:</strong> {{ item.fragility === 1 ? 'Да' : 'Нет' }}
+      </div>
+      <div>
+        <strong>В слой / высота слоя:</strong> {{ item.max_in_layer || '-' }} /
+        {{ item.max_layer_height || '-' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="app-paginator">
+    <p-paginator
+      [rows]="pagination.page_size"
+      [totalRecords]="pagination.total"
+      [rowsPerPageOptions]="[30, 50, 100]"
+      [first]="(pagination.page - 1) * pagination.page_size"
+      [pageLinkSize]="3"
+      (onPageChange)="onPageChange($event)"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{first} - {last} из {totalRecords}"
+    />
   </div>
 </div>

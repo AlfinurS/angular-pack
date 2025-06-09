@@ -122,6 +122,10 @@ export class AuthApiService {
     return this.http.post<AuthResponse>('api/auth/register', params);
   }
 
+  verifyAccount(params: object): Observable<any> {
+    return this.http.post('api/auth/verify-account', params);
+  }
+
   logout(): void {
     this.cookieService.delete('access_token');
     this.cookieService.delete('refresh_token');

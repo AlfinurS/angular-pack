@@ -17,9 +17,8 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { SliderModule } from 'primeng/slider';
 import { ErrorFormTextPipe } from '../../../pipes/error-form-text.pipe';
-import { AuthApiService } from '../../../api/auth.api.service';
+import { NomenclatureApiService } from '../../../api/nomenclature.api.service';
 import { Subscription, catchError, EMPTY, switchMap, delay } from 'rxjs';
-import { Router } from '@angular/router';
 
 export interface IDataModal {}
 @Component({
@@ -37,12 +36,13 @@ export interface IDataModal {}
     CommonModule,
   ],
   templateUrl: './nomenclature-modal.component.html',
-  styleUrl: './nomenclature-modal.component.scss',
+  styleUrls: ['./nomenclature-modal.component.scss'],
 })
 export class NomenclatureModalComponent implements OnInit, OnDestroy {
   readonly dialogRef = inject(MatDialogRef<NomenclatureModalComponent>);
   readonly data = inject<IDataModal>(MAT_DIALOG_DATA);
-  readonly authApiService = inject(AuthApiService);
+  readonly nomenclatureApiService = inject(NomenclatureApiService);
+
   loading: boolean = false;
   subscriptions: Subscription[] = [];
   fragilityLabels: string[] = ['0', '1', '2', '3', '4', '5'];
@@ -58,43 +58,46 @@ export class NomenclatureModalComponent implements OnInit, OnDestroy {
     max_in_layer: new FormControl<number | null>(null, Validators.required),
     fragility: new FormControl<number>(0, Validators.required),
   });
-  router: Router = inject(Router);
 
   get fragilityControl(): FormControl {
     return this.form.get('fragility') as FormControl;
   }
 
   ngOnInit(): void {}
-  /* 
+
   submit(): void {
     const params = {
-      email: this.form.controls.email.value,
-      password: this.form.controls.password.value,
+      article: this.form.controls.article.value ?? '',
+      width: this.form.controls.width.value,
+      height: this.form.controls.height.value,
+      depth: this.form.controls.depth.value,
+      barcode: this.form.controls.barcode.value ?? '',
+      weight: this.form.controls.weight.value,
+      max_layer_height: this.form.controls.max_layer_height.value,
+      max_in_layer: this.form.controls.max_in_layer.value,
+      fragility: this.form.controls.fragility.value,
     };
     this.loading = true;
     this.subscriptions.push(
-      this.authApiService
-        .getTokens(params)
+      this.nomenclatureApiService
+        .createNomenclature(params)
         .pipe(
           delay(100),
-          switchMap((_tokens) => {
-            return this.authApiService.getDataUser();
-          }),
           catchError((error) => {
             this.loading = false;
-            this.form.setErrors({ serverError: error.error.detail });
+            this.form.setErrors({
+              serverError: error?.error?.detail || 'Ошибка сервера',
+            });
             return EMPTY;
           })
         )
-        .subscribe((res) => {
+        .subscribe(() => {
           this.loading = false;
-          this.authApiService.profile.next(res);
-          this.router.navigate(['nomenclature']);
           this.dialogRef.close(true);
           this.form.reset();
         })
     );
-  } */
+  }
 
   close(): void {
     this.dialogRef.close();
